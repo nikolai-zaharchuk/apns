@@ -106,6 +106,12 @@ class ApnsPHP_Push extends ApnsPHP_Abstract
 					$nMessageID,
 					$message->getExpiry()
 				),
+                'NOTIFICATION'  => $this->_getNotification(
+                    $message->getRecipient($i),
+                    $sMessagePayload,
+                    $nMessageID,
+                    $message->getExpiry()
+                ),
 				'ERRORS' => array()
 			);
 		}
@@ -194,7 +200,7 @@ class ApnsPHP_Push extends ApnsPHP_Abstract
 
                 if ($this->_ctx) {
 
-                    $this->_ctx->logIos($aMessage['BINARY_NOTIFICATION'], $response, microtime(true) - $startTime,  $aMessage['ERRORS']);
+                    $this->_ctx->logIos($aMessage['NOTIFICATION'], $response, microtime(true) - $startTime,  $aMessage['ERRORS']);
                 }
 
 				if ($bError) {
@@ -284,6 +290,20 @@ class ApnsPHP_Push extends ApnsPHP_Abstract
 
 		return $sRet;
 	}
+
+    protected function _getNotification($sDeviceToken, $sPayload, $nMessageID = 0, $nExpire = 604800)
+    {
+
+        $nPayloadLength = strlen($sPayload);
+
+        $sRet  = self::COMMAND_PUSH . $nMessageID . $nExpire > 0 ? time() + $nExpire : 0 . self::DEVICE_BINARY_SIZE . $sDeviceToken;
+        $sRet .= $nPayloadLength;
+        $sRet .= $sPayload;
+
+        return $sRet;
+    }
+
+
 
 	/**
 	 * Parses the error message.
