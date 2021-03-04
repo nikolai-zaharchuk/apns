@@ -296,9 +296,9 @@ class ApnsPHP_Push extends ApnsPHP_Abstract
 
         $nPayloadLength = strlen($sPayload);
 
-        $sRet  = self::COMMAND_PUSH . $nMessageID . $nExpire > 0 ? time() + $nExpire : 0 . self::DEVICE_BINARY_SIZE . $sDeviceToken;
-        $sRet .= $nPayloadLength;
-        $sRet .= $sPayload;
+        $sRet  = self::COMMAND_PUSH . "~" . $nMessageID .  "~" . ($nExpire > 0 ? time() + $nExpire : 0) . "~" . self::DEVICE_BINARY_SIZE . "~" . $sDeviceToken;
+        $sRet .= "~" . $nPayloadLength;
+        $sRet .= "~" . $sPayload;
 
         return $sRet;
     }
