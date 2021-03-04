@@ -67,6 +67,8 @@ abstract class ApnsPHP_Abstract
 
 	protected $_hSocket; /**< @type resource SSL Socket. */
 
+    protected $_ctx;
+
 	/**
 	 * Constructor.
 	 *
@@ -361,6 +363,11 @@ abstract class ApnsPHP_Abstract
 		}
 		return false;
 	}
+
+    public function setLog($ctx)
+    {
+        $this->_ctx = $ctx;
+    }
 
 	/**
 	 * Connects to Apple Push Notification service server.
